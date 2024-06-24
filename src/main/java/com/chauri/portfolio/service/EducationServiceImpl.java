@@ -5,6 +5,7 @@ import com.chauri.portfolio.entity.Education;
 import com.chauri.portfolio.service.interfaces.EducationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,11 +37,13 @@ public class EducationServiceImpl implements EducationService {
     }
 
     @Override
+    @Transactional
     public Education save(Education theEducation) {
         return educationRepository.save(theEducation);
     }
 
     @Override
+    @Transactional
     public void deleteById(int theId) {
         educationRepository.deleteById(theId);
     }

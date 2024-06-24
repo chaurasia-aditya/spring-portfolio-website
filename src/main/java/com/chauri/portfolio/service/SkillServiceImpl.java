@@ -29,7 +29,6 @@ public class SkillServiceImpl implements SkillService {
         return skillRepository.findByCategory(category);
     }
 
-    @Transactional
     @Override
     public Skill findById(int theId) {
         Optional<Skill> tempSkill = skillRepository.findById(theId);

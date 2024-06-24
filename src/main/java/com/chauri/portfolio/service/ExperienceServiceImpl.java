@@ -5,6 +5,7 @@ import com.chauri.portfolio.entity.Experience;
 import com.chauri.portfolio.service.interfaces.ExperienceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,11 +35,13 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
+    @Transactional
     public Experience save(Experience workExperience) {
         return experienceRepository.save(workExperience);
     }
 
     @Override
+    @Transactional
     public void deleteById(Integer id) {
         experienceRepository.deleteById(id);
     }
