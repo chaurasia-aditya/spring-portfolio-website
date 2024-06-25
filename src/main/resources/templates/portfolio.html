@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow" />
+
+    <meta
+      name="description"
+      content="Built using Spring Boot, Hibernate, Spring Data JPA, Thymeleaf"
+    />
+
+    <!-- Google / Search Engine Tags -->
+<meta itemprop="name" content="Aditya Chaurasia's Portfolio">
+<meta itemprop="description" content="Built using Spring Boot, Hibernate, Spring Data JPA, Thymeleaf">
+
+<!-- Reference screenshot of updated site's header in place of content -->
+<meta itemprop="image" content="assets/images/sharing-card.png">
+
+<!-- Facebook Meta Tags -->
+<meta property="og:url" content="https://github.com/chaurasia-aditya/spring-portfolio-website">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Aditya Chaurasia's Portfolio">
+<meta property="og:description" content="Built using Spring Boot, Hibernate, Spring Data JPA, Thymeleaf">
+
+<!-- Reference screenshot of updated site's header in content -->
+<meta property="og:image" content="assets/images/sharing-card.png">
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aditya Chaurasia's Portfolio">
+<meta name="twitter:description" content="Built using Spring Boot, Hibernate, Spring Data JPA, Thymeleaf">
+
+<!-- Reference screenshot of updated site's header in content -->
+<meta name="twitter:image" content="assets/images/sharing-card.png">
+
+
+<!-- Update favicon href attribute with image of yourself -->
+    <link
+      rel="shortcut icon"
+      href="assets/images/favicon.ico"
+      type="image/ico"
+    />
+
+    <!-- Preloading fonts for better performance -->
+
+    <link
+      rel="preload"
+      href="assets/fonts/Mona-Sans.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <link rel="stylesheet" href="style.css"  />
+    <script src="script.js" defer></script>
+
+    <!-- Your name here -->
+    <title>Aditya Chaurasia's Portfolio</title>
+  </head>
+
+  <body>
+
+    <script>
+      const theme = localStorage.getItem("theme") || "dark";
+      document.body.classList.add(theme);
+    </script>
+
+    <header class="header">
+
+      <div class="menu-btn-container">
+        <div class="container">
+          <button type="button"  class="menu-btn">menu</button>
+        </div>
+      </div>
+
+      <nav class="nav hidden">
+        <ol class="nav-items">
+          <li class="nav-item"><a href="#">Home</a></li>
+          <li class="nav-item"><a href="#education">Education</a></li>
+          <li class="nav-item"><a href="#experience">Experience</a></li>
+          <li class="nav-item"><a href="#projects">Projects</a></li>
+          <li class="nav-item"><a href="#skills">Skills</a></li>
+          <li class="nav-item">
+            <a href="#contact" data-focused="last-focused">Contact</a>
+          </li>
+          <li class="nav-item"><a th:href="@{/admin}">Admin</a></li>
+        </ol>
+      </nav>
+
+      <div class="container">
+        <div class="header-textbox">
+          <!-- Replace with your name and job title -->
+          <h1 class="h1">
+            <span>Hi, I'm Aditya Chaurasia</span>
+            <span>Software Engineer</span>
+          </h1>
+
+          <!-- Add a small introductory paragraph about yourself -->
+          <p class="header-text">
+            A goal-driven Software Engineer, with 4 years of experience in the IoT space at Samsung.
+            I like working on projects seeking to connect devices and humans more intimately.
+          </p>
+
+          <div class="header-btns">
+            <a href="#contact" class="btn btn-cta">Connect</a>
+            <a href="https://www.dropbox.com/scl/fi/8wphy29nq6mtd13x99973/Aditya-Chaurasia-Resume.pdf?rlkey=kd1gj5s2a8gp5wgt7b8s6ou9l&st=qplua1uc&dl=0&dl=1" download="Aditya_Chaurasia_resume.pdf" class="btn btn-secondary">Resume</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+
+      <!-- Education -->
+      <section class="education">
+        <div class="container">
+          <h2 class="h2" id="education">Education</h2>
+          <div class="education-boxes">
+            <article class="education-box featured-education" th:each="education : ${education}">
+              <div class="education-textbox">
+                <div>
+                  <h3 th:text="${education.universityName}"></h3>
+                  <h4 th:if="${education.program ne null}" th:text="${education.degree + ' - ' + education.program}" th:else="${education.degree}"></h4>
+                  <ul>
+                    <li th:each="course : ${#strings.listSplit(education.coursesTaken, ',')}" th:text="${course}"></li>
+                  </ul>
+                </div>
+              </div>
+              <picture class="education-illustration">
+                <!-- Check if imagePath is not empty and construct the image path accordingly -->
+                <img th:if="${education.imagePath ne null}" th:src="@{'assets/images/education/' + ${education.imagePath}}" alt="Education Image" loading="lazy" />
+                <!-- If imagePath is empty, use the default image -->
+                <img th:if="${education.imagePath == null}" src="assets/images/default-img.webp" alt="MacBook Pro" loading="lazy" />
+              </picture>
+            </article>
+          </div>
+        </div>
+      </section>
+
+    <!-- Industry Experiences -->
+      <section class="industry">
+        <div class="container">
+          <h2 class="h2" id="experience">Experience</h2>
+          <div class="industry-boxes">
+            <div class="industry-timeline"></div>
+            <div class="industry-box" th:each="experience : ${workEx}">
+              <div class="industry-textbox">
+                <h3 class="h3" th:text="${experience.companyName}">Company Name</h3>
+                <p class="industry-text" th:text="${experience.jobTitle}">Job Title</p>
+                <p class="industry-text">
+                  <span th:text="${experience.startDate}">Start Date</span> -
+                  <span th:if="${experience.endDate != null}" th:text="${experience.endDate}">End Date</span>
+                  <span th:if="${experience.endDate == null}">Present</span>
+                </p>
+                <ol class="industry-technologies">
+                  <li th:each="descPoint : ${experience.descPoints}" th:text="${descPoint}"></li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects -->
+      <section class="projects">
+        <div class="container">
+          <h2 class="h2" id="projects">Recent Projects</h2>
+            <div class="project-boxes">
+              <article class="project-box" th:each="project : ${projects} ">
+                <div class="project-textbox">
+                  <div>
+                    <h3 class="h4" th:text="${project.name}">Project Name</h3>
+                    <p class="project-text" th:text="${project.description}">Project Description</p>
+                  </div>
+                  <div class="project-info">
+                    <a th:href="${project.projectLink}" class="link" target="_blank" rel="noopener"
+                       th:text="${project.projectLink != null ? 'View Project' : ''}">View Project</a>
+                  </div>
+                </div>
+              </article>
+            </div>
+        </div>
+      </section>
+
+      <!-- Skills -->
+      <section>
+        <h2 class="h2" id="skills">Skills</h2>
+        <div class="container">
+          <ol class="skills">
+            <li class="skill-category">
+              <div class="domain-list">
+                <span th:each="domain : ${domains}" th:text="${domain.skill}"></span>
+              </div>
+            </li>
+            <li class="skill">
+              <h3 class="h3">Languages</h3>
+              <ol class="skill-list">
+                <li th:each="language : ${languages}" th:text="${language.skill}"></li>
+              </ol>
+            </li>
+            <li class="skill">
+              <h3 class="h3">Frameworks/Libraries</h3>
+              <ol class="skill-list">
+                <li th:each="framework : ${frameworks}" th:text="${framework.skill}"></li>
+              </ol>
+            </li>
+            <li class="skill">
+              <h3 class="h3">DevOps/Tools</h3>
+              <ol class="skill-list">
+                <li th:each="tool : ${devOpsTools}" th:text="${tool.skill}"></li>
+              </ol>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section class="contact">
+        <div class="container">
+          <h2 class="h2" id="contact">Contact Me</h2>
+          <div class="contact-content">
+            <div class="contact-textbox">
+              <div class="hire-alert-div">
+                <a href="mailto:aditya.chaurasia8991@gmail.com" class="hire-alert">Mail me</a>
+              </div>
+
+              <p class="contact-text">
+                My interests span scalable computing systems and machine learning - areas I'm currently exploring at Georgia Tech.
+                I'm passionate about solving complex problems and creating innovative, high-performance solutions.
+                With experience in large-scale projects and a drive for continuous learning, I'm eager to contribute to cutting-edge
+                systems that have a meaningful impact and can scale efficiently.
+              </p>
+            </div>
+            <form th:action="@{/save-message}" th:object="${newMessage}" method="POST" class="contact-form">
+              <div class="form-field">
+                <label for="name">
+                  Name
+                  <span th:if="${#fields.hasErrors('name')}" class="text-danger"> - this is required</span>
+                </label>
+                <input type="text" th:field="*{name}" id="name" required
+                       th:placeholder="${#fields.hasErrors('name')} ? 'This is required' : 'Enter your name'"/>
+              </div>
+              <div class="form-field">
+                <label for="email">
+                  Email
+                  <span th:if="${#fields.hasErrors('email')}" class="text-danger"> - this is required</span>
+                </label>
+                <input type="email" th:field="*{email}" id="email" required inputmode="email"
+                       th:placeholder="${#fields.hasErrors('email')} ? 'This is required' : 'Enter your email'"/>
+<!--                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></div>-->
+              </div>
+              <div class="form-field">
+                <label for="message">
+                  How can I help you?
+                  <span th:if="${#fields.hasErrors('message')}" class="text-danger"> - this is required</span>
+                </label>
+                <textarea th:field="*{message}" id="message" required
+                          th:placeholder="${#fields.hasErrors('message')} ? *{message} : 'Enter your message'"></textarea>
+<!--                <div th:if="${#fields.hasErrors('message')}" th:errors="*{message}" class="text-danger"></div>-->
+              </div>
+              <button type="submit" class="btn btn-cta">Send</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <nav>
+            <ol class="footer-links">
+              <li class="footer-link">
+                <a title="GitHub" href="https://github.com/chaurasia-aditya" target="_blank" rel="noopener"
+                  ><img
+                    loading="lazy"
+                    src="assets/images/social-links/github.svg"
+                    alt="GitHub"
+                /></a>
+              </li>
+              <li class="footer-link">
+                <a title="Linkedin" href="https://www.linkedin.com/in/chauri/" target="_blank" rel="noopener"
+                  ><img
+                    loading="lazy"
+                    src="assets/images/social-links/linkedin.svg"
+                    alt="Linkedin"
+                /></a>
+              </li>
+            </ol>
+          </nav>
+          <p class="footer-text">
+            &copy; <span>2024</span> - Backend developed and integrated by <a target="_blank" rel="noopener" href="https://github.com/chaurasia-aditya">Aditya Chaurasia.</a>
+          </p>
+          <label class="theme-switch" for="theme-switch">
+            <span>Dark Theme</span>
+            <input type="checkbox" id="theme-switch" role="switch"/>
+          </label>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

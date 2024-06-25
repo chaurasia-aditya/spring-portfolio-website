@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
     @RequestMapping({"","/"})
     public String showAdminIndex(){
-        return "admin/home";
+        return "admin/admin-home";
     }
 }
