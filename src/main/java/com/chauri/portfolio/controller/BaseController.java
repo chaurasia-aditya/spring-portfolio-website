@@ -1,9 +1,6 @@
 package com.chauri.portfolio.controller;
 
-import com.chauri.portfolio.entity.Education;
-import com.chauri.portfolio.entity.Message;
-import com.chauri.portfolio.entity.Skill;
-import com.chauri.portfolio.entity.Experience;
+import com.chauri.portfolio.entity.*;
 import com.chauri.portfolio.service.interfaces.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +18,17 @@ public class BaseController {
     private SkillService skillService;
     private EducationService educationService;
     private MessageService messageService;
+    private ProjectService projectService;
 
     @Autowired
     public BaseController(ExperienceService experienceService, SkillService skillService,
-                          EducationService educationService, MessageService messageService) {
+                          EducationService educationService, MessageService messageService,
+                          ProjectService projectService) {
         this.experienceService = experienceService;
         this.skillService = skillService;
         this.educationService = educationService;
         this.messageService = messageService;
+        this.projectService = projectService;
     }
 
     private void getEducationAttributes(Model theModel){
@@ -64,6 +64,13 @@ public class BaseController {
         theModel.addAttribute("domains", domains);
     }
 
+    private void getProjectAttributes(Model theModel){
+        //Projects
+        List<Project> projects = projectService.getAllProjects();
+
+        theModel.addAttribute("projects", projects);
+    }
+
     private void getMessageAttributes(Model theModel){
         Message newMessage = new Message();
         theModel.addAttribute("newMessage", newMessage);
@@ -74,6 +81,7 @@ public class BaseController {
         getEducationAttributes(theModel);
         getExperienceAttributes(theModel);
         getSkillAttributes(theModel);
+        getProjectAttributes(theModel);
         getMessageAttributes(theModel);
 
         return "portfolio";
@@ -91,6 +99,7 @@ public class BaseController {
             getEducationAttributes(theModel);
             getExperienceAttributes(theModel);
             getSkillAttributes(theModel);
+            getProjectAttributes(theModel);
 
             //Message attributes not updated
             theModel.addAttribute("newMessage", theMessage);
