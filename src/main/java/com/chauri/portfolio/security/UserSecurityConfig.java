@@ -1,6 +1,7 @@
 package com.chauri.portfolio.security;
 
 import com.chauri.portfolio.service.UserServiceImpl;
+import com.chauri.portfolio.throttling.ApiRateLimitFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -37,8 +39,9 @@ public class UserSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http, ApiRateLimitFilter apiRateLimitFilter) throws Exception{
         http
+            .addFilterBefore(apiRateLimitFilter, UsernamePasswordAuthenticationFilter.class) // Add rate-limiting filter
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(HttpMethod.GET, "/admin", "/admin/").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/admin/**").hasRole("ADMIN")

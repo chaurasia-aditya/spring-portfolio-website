@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>429 Rate Limited</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <h1>429: Too many request</h1>
+    <p th:if="${errorMessage != null}" th:text="${errorMessage}"></p>
+    <p th:if="${homepageError != null}" th:text="${homepageError}"></p>
+    <p>Try again later</p>
+</body>
+</html>

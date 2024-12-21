@@ -67,6 +67,13 @@
       document.body.classList.add(theme);
     </script>
 
+    <script th:inline="javascript">
+      let rateLimitError = /*[[${rateLimitError != null ? '"' + rateLimitError + '"' : 'null'}]]*/;
+      if (rateLimitError !== 'null') {
+          alert(rateLimitError);
+      }
+    </script>
+
     <header class="header">
 
       <div class="menu-btn-container">

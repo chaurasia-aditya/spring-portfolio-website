@@ -3,6 +3,8 @@ package com.chauri.portfolio.controller;
 import com.chauri.portfolio.entity.*;
 import com.chauri.portfolio.service.interfaces.*;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +16,7 @@ import java.util.List;
 @Controller
 @RequestMapping("")
 public class BaseController {
+    private static final Logger log = LoggerFactory.getLogger(BaseController.class);
     private ExperienceService experienceService;
     private SkillService skillService;
     private EducationService educationService;
@@ -77,12 +80,17 @@ public class BaseController {
     }
 
     @GetMapping({"","/","/portfolio"})
-    public String homeView(Model theModel){
+    public String homeView(Model theModel, @RequestParam(value = "rateLimitError", required = false) String rateLimitError){
         getEducationAttributes(theModel);
         getExperienceAttributes(theModel);
         getSkillAttributes(theModel);
         getProjectAttributes(theModel);
         getMessageAttributes(theModel);
+
+        if (rateLimitError != null) {
+            log.info("Rate limit error: {}", rateLimitError);
+            theModel.addAttribute("rateLimitError", rateLimitError);
+        }
 
         return "portfolio";
     }
@@ -109,5 +117,18 @@ public class BaseController {
 
         messageService.save(theMessage);
         return "redirect:/";
+    }
+
+    @GetMapping("/rate-limit-error")
+    public String errorPage(Model theModel, @RequestParam(value = "message", required = false) String message,
+                            @RequestParam(value = "homepageError", required = false) String homepageError) {
+        if (message != null) {
+            theModel.addAttribute("errorMessage", message);
+        }
+        if (homepageError != null) {
+            theModel.addAttribute("homepageError", homepageError);
+        }
+
+        return "rate-limit-error";
     }
 }
