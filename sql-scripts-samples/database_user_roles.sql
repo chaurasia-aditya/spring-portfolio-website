@@ -18,10 +18,11 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-
+-- NOTE: Passwords must be stored using BCrypt.
+-- The sample password below corresponds to: password123
 INSERT INTO `user` (`username`,`password`,`enabled`)
 VALUES 
-('john','password123',1);
+('john','$2a$12$6WfY13j9iGl0TLoa1JwvLu9McZ4u2c4QRfv/ls3lRQDqAJXTPkRQi',1);
 
 --
 --

@@ -45,6 +45,12 @@ https://github.com/user-attachments/assets/bab07c1c-1187-4cc6-9d20-63d2e4269a59
 - Set up the MySQL database:
   - Create a new MySQL database.
   - You can modify and use the SQL scripts provided in the sql-scripts-samples directory to create the necessary database and tables.
+  
+    __*Note*__: If you manually insert users into the user table, the password must be BCrypt-encrypted, since Spring Security will reject plain-text passwords. The sample SQL script provided already includes a BCrypt-hashed password. 
+    
+    To generate your own BCrypt password, you can:
+    - Generate one online using a BCrypt generator
+    - Or run: new BCryptPasswordEncoder().encode("your-password")
   - Update the application.properties file with your database credentials.
 
     ```
