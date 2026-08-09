@@ -11,8 +11,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
@@ -24,13 +26,23 @@ public class ApiRateLimitFilter implements Filter {
     private static final Logger log = LoggerFactory.getLogger(ApiRateLimitFilter.class);
     private final Map<String, Bucket> endpointBuckets = new ConcurrentHashMap<>();
 
-    public ApiRateLimitFilter() {
-        Bucket portfolioBucket = createBucket(5); // 5 requests per minute for home page
+    @Value("${app.rate-limit.enabled:true}")
+    private boolean rateLimitEnabled;
+
+    @Value("${app.rate-limit.homepage.capacity:5}")
+    private int homepageCapacity;
+
+    @Value("${app.rate-limit.message.capacity:2}")
+    private int messageCapacity;
+
+    @PostConstruct
+    void initBuckets() {
+        Bucket portfolioBucket = createBucket(homepageCapacity);
         endpointBuckets.put("", portfolioBucket);
         endpointBuckets.put("/", portfolioBucket);
         endpointBuckets.put("/portfolio", portfolioBucket);
 
-        endpointBuckets.put("/save-message", createBucket(2)); // 2 requests per minute for sending messages
+        endpointBuckets.put("/save-message", createBucket(messageCapacity));
     }
 
     private Bucket createBucket(int capacity) {
@@ -45,6 +57,12 @@ public class ApiRateLimitFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+        if (!rateLimitEnabled) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         String path = httpRequest.getRequestURI();
 
         // Custom attribute to check if the request is already processed

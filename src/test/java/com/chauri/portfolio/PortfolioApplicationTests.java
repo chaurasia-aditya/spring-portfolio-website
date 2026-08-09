@@ -1,10 +1,9 @@
 package com.chauri.portfolio;
 
+import com.chauri.portfolio.support.BaseIntegrationTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class PortfolioApplicationTests {
+class PortfolioApplicationTests extends BaseIntegrationTest {
 
 	@Test
 	void contextLoads() {
