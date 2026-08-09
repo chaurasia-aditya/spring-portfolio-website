@@ -71,6 +71,16 @@ https://github.com/user-attachments/assets/bab07c1c-1187-4cc6-9d20-63d2e4269a59
   mvn spring-boot:run
   ```
 
+## Testing
+
+Run the integration test suite with:
+
+```
+mvn test
+```
+
+Tests use an in-memory H2 database (`test` profile), so MySQL does not need to be running. MockMvc covers public endpoints, admin CRUD, security authorization, and rate limiting.
+
 ## Usage
 
 - Access the website by navigating to http://localhost:8080 in your web browser.
