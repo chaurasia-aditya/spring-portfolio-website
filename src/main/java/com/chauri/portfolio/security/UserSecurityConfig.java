@@ -5,7 +5,6 @@ import com.chauri.portfolio.throttling.ApiRateLimitFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -43,9 +42,7 @@ public class UserSecurityConfig {
         http
             .addFilterBefore(apiRateLimitFilter, UsernamePasswordAuthenticationFilter.class) // Add rate-limiting filter
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(HttpMethod.GET, "/admin", "/admin/").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/admin/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
+                .requestMatchers("/admin", "/admin/", "/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
             )
             .httpBasic(Customizer.withDefaults())
