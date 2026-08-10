@@ -87,6 +87,7 @@
           <li class="nav-item"><a href="#">Home</a></li>
           <li class="nav-item"><a href="#education">Education</a></li>
           <li class="nav-item"><a href="#experience">Experience</a></li>
+          <li class="nav-item"><a href="#research">Research</a></li>
           <li class="nav-item"><a href="#projects">Projects</a></li>
           <li class="nav-item"><a href="#skills">Skills</a></li>
           <li class="nav-item">
@@ -120,52 +121,112 @@
 
     <main>
 
-      <!-- Education -->
-      <section class="education">
+      <!-- Education & Experience -->
+      <section class="career-section">
         <div class="container">
-          <h2 class="h2" id="education">Education</h2>
-          <div class="education-boxes">
-            <article class="education-box featured-education" th:each="education : ${education}">
-              <div class="education-textbox">
-                <div>
-                  <h3 th:text="${education.universityName}"></h3>
-                  <h4 th:if="${education.program ne null}" th:text="${education.degree + ' - ' + education.program}" th:else="${education.degree}"></h4>
-                  <ul>
-                    <li th:each="course : ${#strings.listSplit(education.coursesTaken, ',')}" th:text="${course}"></li>
-                  </ul>
-                </div>
+          <div class="career-grid">
+            <div class="career-column career-column--education" id="education">
+              <h2 class="h2">Education</h2>
+              <div class="education-scroll" th:if="${!#lists.isEmpty(education)}">
+                <article class="education-entry" th:each="educationEntry : ${education}">
+                  <div class="education-entry-header">
+                    <img class="education-entry-badge"
+                         th:if="${educationEntry.imagePath != null}"
+                         th:src="@{'assets/images/education/' + ${educationEntry.imagePath}}"
+                         th:alt="${educationEntry.universityName}"
+                         loading="lazy" />
+                    <img class="education-entry-badge"
+                         th:if="${educationEntry.imagePath == null}"
+                         th:src="@{/assets/images/default-img.webp}"
+                         alt="Education institution"
+                         loading="lazy" />
+                    <div class="education-entry-info">
+                      <h3 class="education-entry-school" th:text="${educationEntry.universityName}">University Name</h3>
+                      <p class="education-entry-degree"
+                         th:if="${educationEntry.program ne null}"
+                         th:text="${educationEntry.degree + ' · ' + educationEntry.program}"
+                         th:else="${educationEntry.degree}">Degree</p>
+                      <p class="education-entry-dates" th:if="${educationEntry.startDate != null}">
+                        <span th:text="${educationEntry.startDate}">Start Date</span>
+                        <span th:if="${educationEntry.endDate != null}"> – </span>
+                        <span th:if="${educationEntry.endDate != null}" th:text="${educationEntry.endDate}">End Date</span>
+                        <span th:if="${educationEntry.endDate == null}"> – Present</span>
+                      </p>
+                    </div>
+                  </div>
+                  <details class="education-courses-toggle"
+                           th:if="${educationEntry.coursesTaken != null and !#strings.isEmpty(educationEntry.coursesTaken)}">
+                    <summary class="education-courses-summary">Coursework</summary>
+                    <ul class="education-courses">
+                      <li th:each="course : ${#strings.listSplit(educationEntry.coursesTaken, ',')}"
+                          th:text="${#strings.trim(course)}"></li>
+                    </ul>
+                  </details>
+                </article>
               </div>
-              <picture class="education-illustration">
-                <!-- Check if imagePath is not empty and construct the image path accordingly -->
-                <img th:if="${education.imagePath ne null}" th:src="@{'assets/images/education/' + ${education.imagePath}}" alt="Education Image" loading="lazy" />
-                <!-- If imagePath is empty, use the default image -->
-                <img th:if="${education.imagePath == null}" src="assets/images/default-img.webp" alt="MacBook Pro" loading="lazy" />
-              </picture>
-            </article>
+            </div>
+
+            <div class="career-column career-column--experience" id="experience">
+              <h2 class="h2">Experience</h2>
+              <div class="experience-scroll" th:if="${!#lists.isEmpty(workEx)}">
+                <article class="experience-entry" th:each="experience : ${workEx}">
+                  <header class="experience-entry-header">
+                    <h3 class="experience-entry-role" th:text="${experience.jobTitle}">Job Title</h3>
+                    <p class="experience-entry-meta">
+                      <span th:text="${experience.companyName}">Company Name</span>
+                      <span class="experience-entry-separator" aria-hidden="true">·</span>
+                      <span>
+                        <span th:text="${experience.startDate}">Start</span> -
+                        <span th:if="${experience.endDate != null}" th:text="${experience.endDate}">End</span>
+                        <span th:if="${experience.endDate == null}">Present</span>
+                      </span>
+                    </p>
+                  </header>
+                  <ol class="industry-technologies" th:if="${not #lists.isEmpty(experience.descPoints)}">
+                    <li th:each="descPoint : ${experience.descPoints}" th:text="${descPoint}"></li>
+                  </ol>
+                </article>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-    <!-- Industry Experiences -->
-      <section class="industry">
+      <!-- Research -->
+      <section class="research-section" th:if="${!#lists.isEmpty(researchEntries)}">
         <div class="container">
-          <h2 class="h2" id="experience">Experience</h2>
-          <div class="industry-boxes">
-            <div class="industry-timeline"></div>
-            <div class="industry-box" th:each="experience : ${workEx}">
-              <div class="industry-textbox">
-                <h3 class="h3" th:text="${experience.companyName}">Company Name</h3>
-                <p class="industry-text" th:text="${experience.jobTitle}">Job Title</p>
-                <p class="industry-text">
-                  <span th:text="${experience.startDate}">Start Date</span> -
-                  <span th:if="${experience.endDate != null}" th:text="${experience.endDate}">End Date</span>
-                  <span th:if="${experience.endDate == null}">Present</span>
+          <h2 class="h2" id="research">Research</h2>
+          <div class="research-list">
+            <article class="research-card" th:each="entry : ${researchEntries}">
+              <div class="research-card-header">
+                <span class="research-type" th:text="${entry.type}">Patent</span>
+                <p class="research-meta">
+                  <span th:if="${entry.referenceNumber != null and !#strings.isEmpty(entry.referenceNumber)}"
+                        th:text="${entry.referenceNumber}">US 10,000,000</span>
+                  <span th:if="${entry.status != null and !#strings.isEmpty(entry.status)}"
+                        th:text="${entry.status}">Granted</span>
+                  <span th:if="${entry.publishedDate != null}"
+                        th:text="${#temporals.format(entry.publishedDate, 'MMM yyyy')}">Jan 2024</span>
                 </p>
-                <ol class="industry-technologies">
-                  <li th:each="descPoint : ${experience.descPoints}" th:text="${descPoint}"></li>
-                </ol>
               </div>
-            </div>
+              <h3 class="research-title" th:text="${entry.title}">Research title</h3>
+              <p class="research-byline"
+                 th:if="${(entry.authors != null and !#strings.isEmpty(entry.authors)) or (entry.venue != null and !#strings.isEmpty(entry.venue))}">
+                <span th:if="${entry.authors != null and !#strings.isEmpty(entry.authors)}"
+                      th:text="${entry.authors}">Authors</span>
+                <span th:if="${entry.authors != null and !#strings.isEmpty(entry.authors) and entry.venue != null and !#strings.isEmpty(entry.venue)}"> · </span>
+                <span th:if="${entry.venue != null and !#strings.isEmpty(entry.venue)}"
+                      th:text="${entry.venue}">Venue</span>
+              </p>
+              <p class="research-summary" th:if="${entry.description != null and !#strings.isEmpty(entry.description)}"
+                 th:text="${entry.description}">Summary</p>
+              <a th:if="${entry.link != null and !#strings.isEmpty(entry.link)}"
+                 th:href="${entry.link}"
+                 class="link research-link"
+                 target="_blank"
+                 rel="noopener"
+                 th:text="${entry.type == 'Patent' ? 'View Patent' : 'View Publication'}">View</a>
+            </article>
           </div>
         </div>
       </section>
@@ -192,34 +253,39 @@
       </section>
 
       <!-- Skills -->
-      <section>
-        <h2 class="h2" id="skills">Skills</h2>
+      <section class="skills-section">
         <div class="container">
-          <ol class="skills">
-            <li class="skill-category">
-              <div class="domain-list">
-                <span th:each="domain : ${domains}" th:text="${domain.skill}"></span>
-              </div>
-            </li>
-            <li class="skill">
-              <h3 class="h3">Languages</h3>
-              <ol class="skill-list">
-                <li th:each="language : ${languages}" th:text="${language.skill}"></li>
-              </ol>
-            </li>
-            <li class="skill">
-              <h3 class="h3">Frameworks/Libraries</h3>
-              <ol class="skill-list">
-                <li th:each="framework : ${frameworks}" th:text="${framework.skill}"></li>
-              </ol>
-            </li>
-            <li class="skill">
-              <h3 class="h3">DevOps/Tools</h3>
-              <ol class="skill-list">
-                <li th:each="tool : ${devOpsTools}" th:text="${tool.skill}"></li>
-              </ol>
-            </li>
-          </ol>
+          <h2 class="h2" id="skills">Skills</h2>
+
+          <div class="skills-grid">
+            <div class="skills-group" th:if="${!#lists.isEmpty(domains)}">
+              <h3 class="skills-group-title">Domains</h3>
+              <ul class="skill-chips">
+                <li th:each="domain : ${domains}" class="skill-chip skill-chip--accent" th:text="${domain.skill}">Domain</li>
+              </ul>
+            </div>
+
+            <div class="skills-group" th:if="${!#lists.isEmpty(languages)}">
+              <h3 class="skills-group-title">Languages</h3>
+              <ul class="skill-chips">
+                <li th:each="language : ${languages}" class="skill-chip" th:text="${language.skill}">Language</li>
+              </ul>
+            </div>
+
+            <div class="skills-group" th:if="${!#lists.isEmpty(frameworks)}">
+              <h3 class="skills-group-title">Frameworks</h3>
+              <ul class="skill-chips">
+                <li th:each="framework : ${frameworks}" class="skill-chip" th:text="${framework.skill}">Framework</li>
+              </ul>
+            </div>
+
+            <div class="skills-group" th:if="${!#lists.isEmpty(devOpsTools)}">
+              <h3 class="skills-group-title">DevOps &amp; Tools</h3>
+              <ul class="skill-chips">
+                <li th:each="tool : ${devOpsTools}" class="skill-chip" th:text="${tool.skill}">Tool</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
