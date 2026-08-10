@@ -11,7 +11,7 @@ https://github.com/user-attachments/assets/bab07c1c-1187-4cc6-9d20-63d2e4269a59
 ## Features
 
 - Responsive Design: The website is fully responsive and works on different devices.
-- Dynamic Content: Projects and other content are fetched from a MySQL database.
+- Dynamic Content: Projects, education, experience, skills, and research entries are fetched from a MySQL database.
 - Validation: Form inputs are validated using Spring Boot validation.
 - Admin Control: An admin interface is provided to perform CRUD operations on the tables, dynamically affecting the website.
 - Rate Limiting: API requests are rate-limited to enhance security and prevent abuse, with separate limits for the homepage and sending messages.
@@ -44,7 +44,8 @@ https://github.com/user-attachments/assets/bab07c1c-1187-4cc6-9d20-63d2e4269a59
   
 - Set up the MySQL database:
   - Create a new MySQL database.
-  - You can modify and use the SQL scripts provided in the sql-scripts-samples directory to create the necessary database and tables.
+  - Use the sample SQL scripts in `sql-scripts-samples/` to create the necessary tables (including `database_research.sql` for patents and publications).
+  - For local-only scripts with your own data, use a `sql-scripts/` directory at the project root. That folder is gitignored and is not committed to the repository.
   
     __*Note*__: If you manually insert users into the user table, the password must be BCrypt-encrypted, since Spring Security will reject plain-text passwords. The sample SQL script provided already includes a BCrypt-hashed password. 
     
@@ -84,7 +85,7 @@ Tests use an in-memory H2 database (`test` profile), so MySQL does not need to b
 ## Usage
 
 - Access the website by navigating to http://localhost:8080 in your web browser.
-- Admin control can be accessed from the menu and usedfor performing CRUD operations on the database tables, which dynamically affect the website content.
+- Admin control can be accessed from the menu and used for performing CRUD operations on the database tables (projects, skills, education, experience, research, and messages), which dynamically affect the website content.
 
 ## Contributing
 
