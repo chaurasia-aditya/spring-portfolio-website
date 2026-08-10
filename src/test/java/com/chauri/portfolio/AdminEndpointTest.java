@@ -22,7 +22,8 @@ class AdminEndpointTest extends BaseIntegrationTest {
             "/admin/skills",
             "/admin/education",
             "/admin/experience",
-            "/admin/messages"
+            "/admin/messages",
+            "/admin/research"
     })
     @WithMockUser(roles = "ADMIN")
     void adminPagesLoadForAdmin(String path) throws Exception {
@@ -36,7 +37,8 @@ class AdminEndpointTest extends BaseIntegrationTest {
             "/admin/skills, admin/skills/list-skills",
             "/admin/education, admin/education/list-education",
             "/admin/experience, admin/experience/list-experience",
-            "/admin/messages, admin/messages/list-messages"
+            "/admin/messages, admin/messages/list-messages",
+            "/admin/research, admin/research/list-research"
     })
     @WithMockUser(roles = "ADMIN")
     void adminListPagesReturnExpectedView(String path, String viewName) throws Exception {
@@ -50,7 +52,8 @@ class AdminEndpointTest extends BaseIntegrationTest {
             "/admin/projects/showFormForAdd, admin/projects/project-form",
             "/admin/skills/showFormForAdd, admin/skills/skill-form",
             "/admin/education/showFormForAdd, admin/education/education-form",
-            "/admin/experience/showFormForAdd, admin/experience/experience-form"
+            "/admin/experience/showFormForAdd, admin/experience/experience-form",
+            "/admin/research/showFormForAdd, admin/research/research-form"
     })
     @WithMockUser(roles = "ADMIN")
     void adminAddFormsLoad(String path, String viewName) throws Exception {
@@ -68,6 +71,18 @@ class AdminEndpointTest extends BaseIntegrationTest {
                         .param("projectLink", "https://example.com"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin/projects"));
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void saveResearchRedirectsToList() throws Exception {
+        mockMvc.perform(post("/admin/research/save")
+                        .param("type", "Patent")
+                        .param("title", "Test Patent")
+                        .param("description", "Integration test research entry")
+                        .param("link", "https://example.com"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/research"));
     }
 
     @Test

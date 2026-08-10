@@ -19,7 +19,8 @@ class SecurityEndpointTest extends BaseIntegrationTest {
             "/admin/skills",
             "/admin/education",
             "/admin/experience",
-            "/admin/messages"
+            "/admin/messages",
+            "/admin/research"
     })
     void adminGetEndpointsRequireAuthentication(String path) throws Exception {
         mockMvc.perform(get(path))
@@ -31,7 +32,8 @@ class SecurityEndpointTest extends BaseIntegrationTest {
             "/admin/projects/save",
             "/admin/skills/save",
             "/admin/education/save",
-            "/admin/experience/save"
+            "/admin/experience/save",
+            "/admin/research/save"
     })
     void adminPostEndpointsRequireAuthentication(String path) throws Exception {
         mockMvc.perform(post(path))
@@ -45,7 +47,8 @@ class SecurityEndpointTest extends BaseIntegrationTest {
             "/admin/skills",
             "/admin/education",
             "/admin/experience",
-            "/admin/messages"
+            "/admin/messages",
+            "/admin/research"
     })
     @WithMockUser(roles = "EMPLOYEE")
     void adminGetEndpointsDenyNonAdminRoles(String path) throws Exception {
@@ -59,7 +62,8 @@ class SecurityEndpointTest extends BaseIntegrationTest {
             "/admin/projects/save",
             "/admin/skills/save",
             "/admin/education/save",
-            "/admin/experience/save"
+            "/admin/experience/save",
+            "/admin/research/save"
     })
     @WithMockUser(roles = "EMPLOYEE")
     void adminPostEndpointsDenyNonAdminRoles(String path) throws Exception {

@@ -3,11 +3,13 @@ package com.chauri.portfolio;
 import com.chauri.portfolio.dao.ProjectRepository;
 import com.chauri.portfolio.dao.EducationRepository;
 import com.chauri.portfolio.dao.ExperienceRepository;
+import com.chauri.portfolio.dao.ResearchRepository;
 import com.chauri.portfolio.dao.SkillRepository;
 import com.chauri.portfolio.entity.Education;
 import com.chauri.portfolio.entity.Experience;
 import com.chauri.portfolio.entity.Message;
 import com.chauri.portfolio.entity.Project;
+import com.chauri.portfolio.entity.Research;
 import com.chauri.portfolio.entity.Skill;
 import com.chauri.portfolio.service.interfaces.MessageService;
 import com.chauri.portfolio.support.BaseIntegrationTest;
@@ -39,6 +41,9 @@ class AdminUpdateDeleteTest extends BaseIntegrationTest {
 
     @Autowired
     private ExperienceRepository experienceRepository;
+
+    @Autowired
+    private ResearchRepository researchRepository;
 
     @Autowired
     private MessageService messageService;
@@ -209,6 +214,53 @@ class AdminUpdateDeleteTest extends BaseIntegrationTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
+    void updateResearch() throws Exception {
+        Research research = researchRepository.save(createResearch(
+                "Patent", "Original Patent", "Aditya Chaurasia", "Samsung Electronics",
+                "US 1", "Granted", LocalDate.of(2022, 1, 1), "Original summary.", "https://example.com"));
+
+        mockMvc.perform(get("/admin/research/showFormForUpdate")
+                        .param("researchId", research.getId().toString()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/research/research-form"));
+
+        mockMvc.perform(post("/admin/research/save")
+                        .param("id", research.getId().toString())
+                        .param("type", "Publication")
+                        .param("title", "Updated Paper")
+                        .param("authors", "Aditya Chaurasia")
+                        .param("venue", "IEEE")
+                        .param("referenceNumber", "DOI:10.0000/example")
+                        .param("status", "Published")
+                        .param("publishedDate", "2024-06-01")
+                        .param("description", "Updated summary.")
+                        .param("link", "https://updated.example.com"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/research"));
+
+        Research updated = researchRepository.findById(research.getId()).orElseThrow();
+        assertEquals("Publication", updated.getType());
+        assertEquals("Updated Paper", updated.getTitle());
+        assertEquals("IEEE", updated.getVenue());
+        assertEquals(LocalDate.of(2024, 6, 1), updated.getPublishedDate());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void deleteResearch() throws Exception {
+        Research research = researchRepository.save(createResearch(
+                "Patent", "Delete Me", null, null, null, null, null, null, null));
+
+        mockMvc.perform(get("/admin/research/delete")
+                        .param("researchId", research.getId().toString()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/research"));
+
+        assertFalse(researchRepository.findById(research.getId()).isPresent());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
     void deleteMessage() throws Exception {
         Message message = messageService.save(new Message("Jane Doe", "jane@example.com", "Please delete this."));
 
@@ -228,5 +280,21 @@ class AdminUpdateDeleteTest extends BaseIntegrationTest {
         skill.setCategory(category);
         skill.setSkill(name);
         return skill;
+    }
+
+    private Research createResearch(String type, String title, String authors, String venue,
+                                    String referenceNumber, String status, LocalDate publishedDate,
+                                    String description, String link) {
+        Research research = new Research();
+        research.setType(type);
+        research.setTitle(title);
+        research.setAuthors(authors);
+        research.setVenue(venue);
+        research.setReferenceNumber(referenceNumber);
+        research.setStatus(status);
+        research.setPublishedDate(publishedDate);
+        research.setDescription(description);
+        research.setLink(link);
+        return research;
     }
 }

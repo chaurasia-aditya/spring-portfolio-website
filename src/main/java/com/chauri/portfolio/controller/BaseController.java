@@ -22,16 +22,18 @@ public class BaseController {
     private EducationService educationService;
     private MessageService messageService;
     private ProjectService projectService;
+    private ResearchService researchService;
 
     @Autowired
     public BaseController(ExperienceService experienceService, SkillService skillService,
                           EducationService educationService, MessageService messageService,
-                          ProjectService projectService) {
+                          ProjectService projectService, ResearchService researchService) {
         this.experienceService = experienceService;
         this.skillService = skillService;
         this.educationService = educationService;
         this.messageService = messageService;
         this.projectService = projectService;
+        this.researchService = researchService;
     }
 
     private void getEducationAttributes(Model theModel){
@@ -74,6 +76,12 @@ public class BaseController {
         theModel.addAttribute("projects", projects);
     }
 
+    private void getResearchAttributes(Model theModel){
+        List<Research> researchEntries = researchService.getAllResearch();
+
+        theModel.addAttribute("researchEntries", researchEntries);
+    }
+
     private void getMessageAttributes(Model theModel){
         Message newMessage = new Message();
         theModel.addAttribute("newMessage", newMessage);
@@ -85,6 +93,7 @@ public class BaseController {
         getExperienceAttributes(theModel);
         getSkillAttributes(theModel);
         getProjectAttributes(theModel);
+        getResearchAttributes(theModel);
         getMessageAttributes(theModel);
 
         if (rateLimitError != null) {
@@ -108,6 +117,7 @@ public class BaseController {
             getExperienceAttributes(theModel);
             getSkillAttributes(theModel);
             getProjectAttributes(theModel);
+            getResearchAttributes(theModel);
 
             //Message attributes not updated
             theModel.addAttribute("newMessage", theMessage);
