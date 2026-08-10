@@ -40,8 +40,8 @@ public class ExperienceAdminController {
     }
 
     @PostMapping("/save")
-    public String saveExperience(@ModelAttribute("newExperience") Experience newExperience){
-        experienceService.save(newExperience);
+    public String saveExperience(@ModelAttribute("experience") Experience experience){
+        experienceService.save(experience);
 
         //Using redirect to prevent duplicate submissions
         return "redirect:/admin/experience";

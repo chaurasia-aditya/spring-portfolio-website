@@ -33,6 +33,9 @@ public class Experience {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "display_on_portfolio", nullable = false)
+    private boolean displayOnPortfolio = true;
+
     @Transient
     List<String> descPoints;
 
@@ -93,6 +96,14 @@ public class Experience {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isDisplayOnPortfolio() {
+        return displayOnPortfolio;
+    }
+
+    public void setDisplayOnPortfolio(boolean displayOnPortfolio) {
+        this.displayOnPortfolio = displayOnPortfolio;
     }
 
     public List<String> getDescPoints() {

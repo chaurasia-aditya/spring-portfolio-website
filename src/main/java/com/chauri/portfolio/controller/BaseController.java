@@ -48,7 +48,7 @@ public class BaseController {
 
     private void getExperienceAttributes(Model theModel){
         //Experience
-        List<Experience> experiences = experienceService.getAllWorkExperiences();
+        List<Experience> experiences = experienceService.getPortfolioWorkExperiences();
 
         for(Experience temp: experiences)
             temp.setDescPoints();

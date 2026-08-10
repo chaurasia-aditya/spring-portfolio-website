@@ -10,13 +10,14 @@ CREATE TABLE `work_experience` (
   `start_date` date NOT NULL,
   `end_date` date DEFAULT NULL,
   `description` text DEFAULT NULL,
+  `display_on_portfolio` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 --
 --
 
-INSERT INTO `work_experience` (`company_name`, `job_title`, `start_date`, `end_date`, `description`) VALUES
-('Company A', 'Software Engineer', '2020-01-01', '2021-01-01', 'Worked on developing and maintaining web applications.'),
-('Company B', 'Senior Developer', '2021-02-01', '2022-02-01', 'Led a team of developers in building scalable software solutions.'),
-('Company C', 'Tech Lead', '2022-03-01', NULL, 'Overseeing technical projects and ensuring code quality and efficiency.');
+INSERT INTO `work_experience` (`company_name`, `job_title`, `start_date`, `end_date`, `description`, `display_on_portfolio`) VALUES
+('Company A', 'Software Engineer', '2020-01-01', '2021-01-01', 'Worked on developing and maintaining web applications.', 1),
+('Company B', 'Senior Developer', '2021-02-01', '2022-02-01', 'Led a team of developers in building scalable software solutions.', 1),
+('Company C', 'Tech Lead', '2022-03-01', NULL, 'Overseeing technical projects and ensuring code quality and efficiency.', 1);

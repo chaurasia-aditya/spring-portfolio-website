@@ -22,7 +22,12 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Override
     public List<Experience> getAllWorkExperiences() {
-        return experienceRepository.findAllByOrderByEndDateDesc();
+        return experienceRepository.findAllForAdmin();
+    }
+
+    @Override
+    public List<Experience> getPortfolioWorkExperiences() {
+        return experienceRepository.findAllForPortfolio();
     }
 
     @Override

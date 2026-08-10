@@ -36,11 +36,17 @@
         <div class="mb-3">
             <label for="endDate" class="form-label">End Date</label>
             <input type="date" id="endDate" th:field="*{endDate}" class="form-control">
+            <div class="form-text">Leave blank for a current role (shown as Present).</div>
         </div>
 
         <div class="mb-3">
             <label for="description" class="form-label">Description</label>
             <textarea id="description" th:field="*{description}" class="form-control" rows="3" placeholder="Description"></textarea>
+        </div>
+
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="displayOnPortfolio" th:field="*{displayOnPortfolio}">
+            <label class="form-check-label" for="displayOnPortfolio">Display on portfolio</label>
         </div>
 
         <button type="submit" class="btn btn-primary">Save</button>

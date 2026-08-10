@@ -26,6 +26,7 @@
             <th>Job Title</th>
             <th>Start Date</th>
             <th>End Date</th>
+            <th>Display</th>
             <th>Description</th>
             <th></th>
         </tr>
@@ -36,6 +37,7 @@
             <td th:text="${experience.jobTitle}"></td>
             <td th:text="${experience.startDate != null ? #temporals.format(experience.startDate, 'yyyy-MM-dd') : ''}"></td>
             <td th:text="${experience.endDate != null ? #temporals.format(experience.endDate, 'yyyy-MM-dd') : ''}"></td>
+            <td th:text="${experience.displayOnPortfolio ? 'Yes' : 'No'}"></td>
             <td th:text="${#strings.isEmpty(experience.description) ? '' : experience.description}"></td>
             <!-- Update and Delete buttons -->
             <td>

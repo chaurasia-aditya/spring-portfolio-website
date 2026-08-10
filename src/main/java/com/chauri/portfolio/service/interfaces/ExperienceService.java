@@ -7,6 +7,8 @@ import java.util.List;
 public interface ExperienceService {
     List<Experience> getAllWorkExperiences();
 
+    List<Experience> getPortfolioWorkExperiences();
+
     Experience findById(Integer id);
 
     Experience save(Experience workExperience);
